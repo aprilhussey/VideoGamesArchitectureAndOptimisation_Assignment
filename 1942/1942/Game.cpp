@@ -4,6 +4,7 @@
 
 #include "Game.h"
 #include "Player.h"
+#include "Bullet.h"
 
 // Complier Directives
 //using namespace std;
@@ -28,7 +29,16 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 	sf::Vector2f gameBackgroundPos(0, 0);
 
 		// Player
+	sf::Vector2f playerScale(1.f, 1.f);
+	sf::Vector2f playerOrigin(32.f, 32.f);
+	sf::Vector2f playerPos(320.f, 700.f);
 	sf::Texture playerTexture;
+
+		// Player Bullet
+	sf::Vector2f playerBulletScale(1.f, 1.f);
+	sf::Vector2f playerBulletOrigin(32.f, 32.f);
+	sf::Vector2f playerBulletPos;
+	sf::Texture playerBulletTexture;
 
 	////////// ////////// ////////// ////////// //////////
 
@@ -50,7 +60,14 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 		std::cout << "Error: Loading image file for playerTexture has failed." << "\n";
 		system("pause");
 	}
-	Player player(1.f, 1.f, 32.f, 32.f, 320.f, 700.f, playerTexture);
+	Player player(playerScale.x, playerScale.y, playerOrigin.x, playerOrigin.y, playerPos.x, playerPos.y, playerTexture);
+
+		// Player Bullet
+	if (!playerBulletTexture.loadFromFile("Assets/1942_Player Bullet.png"))
+	{
+		std::cout << "Error: Loading image file for playerBulletTexture has failed." << "\n";
+		system("pause");
+	}
 
 	////////// ////////// ////////// ////////// //////////
 
@@ -66,7 +83,7 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 			}
 			else if (event.type == sf::Event::KeyPressed)
 			{
-				//std::cout << event.key.code << "\n";
+				std::cout << event.key.code << "\n";
 				////////// ////////// ////////// ////////// //////////
 				if (event.key.code == 36)	// If <ESC> is pressed, pause the game.
 				{
@@ -92,6 +109,14 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 				{
 					//std::cout << "The <DOWN ARROW> key was pressed" << "\n";
 					player.moveBackward();
+				}
+				////////// ////////// ////////// ////////// //////////
+				if (event.key.code == 18)	// If <S> is pressed, shoot bullets.
+				{
+					//std::cout << "The <S> key was pressed" << "\n";
+					playerBulletPos = player.sprite.getPosition();
+					Bullet playerBullet(playerBulletScale.x, playerBulletScale.y, playerBulletOrigin.x, playerBulletOrigin.y, playerBulletPos.x, playerBulletPos.y, playerBulletTexture);
+					playerBullet.shoot(appWindow, playerBullet.sprite);
 				}
 			}
 		}
