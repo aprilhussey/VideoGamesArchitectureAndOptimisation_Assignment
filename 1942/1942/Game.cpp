@@ -30,13 +30,13 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 
 		// Player
 	sf::Vector2f playerScale(1.f, 1.f);
-	sf::Vector2f playerOrigin(32.f, 32.f);
+	sf::Vector2f playerOrigin(91.f/2, 57.f/2);
 	sf::Vector2f playerPos(300.f, 580.f);
 	sf::Texture playerTexture;
 
 		// Player Bullet
 	sf::Vector2f playerBulletScale(1.f, 1.f);
-	sf::Vector2f playerBulletOrigin(32.f, 32.f);
+	sf::Vector2f playerBulletOrigin(45.f/2, 7.f/2);
 	sf::Vector2f playerBulletPos;
 	sf::Texture playerBulletTexture;
 

@@ -53,9 +53,9 @@ void Player::moveForward()
 {
 	sf::Vector2f pos = sprite.getPosition();
 	pos.y = pos.y - 5.f;
-	if (pos.y < (height / 2) - 11)
+	if (pos.y < (height / 2))
 	{
-		pos.y = (height / 2) - 11;	// The 11 is needed here to make the player move to the edge.
+		pos.y = (height / 2);
 		sprite.setPosition(pos.x, pos.y);
 	}
 	else
@@ -68,9 +68,9 @@ void Player::moveBackward()
 {
 	sf::Vector2f pos = sprite.getPosition();
 	pos.y = pos.y + 5.f;
-	if (pos.y > 680 - (height / 2) + 11)
+	if (pos.y > 680 - (height / 2))
 	{
-		pos.y = 680 - (height / 2) + 11;	// The 11 is needed here to make the player move to the edge.
+		pos.y = 680 - (height / 2);
 		sprite.setPosition(pos.x, pos.y);
 	}
 	else

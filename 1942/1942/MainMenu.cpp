@@ -43,11 +43,6 @@ void MainMenu::run(sf::RenderWindow& appWindow, sf::Event& event)
 	pressToStart.setString("P R E S S  E N T E R\n    T O  S T A R T");
 	pressToStart.setCharacterSize(30);
 	pressToStart.setPosition(181.5, 440.f);
-		/*
-		// Press Enter to Start
-	sf::Vector2f pressToStartScale(1.f, 1.f);
-	sf::Vector2f pressToStartPos(181.5, 440.f);
-	*/
 
 	// Load graphics
 		// Main Menu Background
@@ -60,19 +55,6 @@ void MainMenu::run(sf::RenderWindow& appWindow, sf::Event& event)
 	sf::Sprite mainMenuBackgroundSprite(mainMenuBackgroundTexture);
 	mainMenuBackgroundSprite.setScale(mainMenuBackgroundScale);
 	mainMenuBackgroundSprite.setPosition(mainMenuBackgroundPos);
-
-		/*
-		// Press Enter to Start
-	sf::Texture pressToStartTexture;
-	if (!pressToStartTexture.loadFromFile("Assets/1942_Press Enter to Start.png"))
-	{
-		std::cout << "Error: Loading image file for pressToStartTexture has failed." << "\n";
-		system("pause");
-	}
-	sf::Sprite pressToStartSprite(pressToStartTexture);
-	pressToStartSprite.setScale(pressToStartScale);
-	pressToStartSprite.setPosition(pressToStartPos);
-	*/
 
 	// Clock to measure overall timing
 	sf::Clock clock;
