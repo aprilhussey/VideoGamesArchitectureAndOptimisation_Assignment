@@ -31,7 +31,7 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 		// Player
 	sf::Vector2f playerScale(1.f, 1.f);
 	sf::Vector2f playerOrigin(32.f, 32.f);
-	sf::Vector2f playerPos(320.f, 700.f);
+	sf::Vector2f playerPos(300.f, 580.f);
 	sf::Texture playerTexture;
 
 		// Player Bullet
@@ -39,6 +39,8 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 	sf::Vector2f playerBulletOrigin(32.f, 32.f);
 	sf::Vector2f playerBulletPos;
 	sf::Texture playerBulletTexture;
+
+	bool shooting = false;
 
 	////////// ////////// ////////// ////////// //////////
 
@@ -69,6 +71,8 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 		system("pause");
 	}
 
+	std::vector<Bullet> bulletsOnScreen;
+
 	////////// ////////// ////////// ////////// //////////
 
 	// THE GAME LOOP
@@ -83,7 +87,7 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 			}
 			else if (event.type == sf::Event::KeyPressed)
 			{
-				std::cout << event.key.code << "\n";
+				//std::cout << event.key.code << "\n";
 				////////// ////////// ////////// ////////// //////////
 				if (event.key.code == 36)	// If <ESC> is pressed, pause the game.
 				{
@@ -117,11 +121,28 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 					playerBulletPos = player.sprite.getPosition();
 					Bullet playerBullet(playerBulletScale.x, playerBulletScale.y, playerBulletOrigin.x, playerBulletOrigin.y, playerBulletPos.x, playerBulletPos.y, playerBulletTexture);
 					playerBullet.shoot(appWindow, playerBullet.sprite);
+					bulletsOnScreen.emplace_back(playerBullet);
 				}
 			}
 		}
+		//////////////////////////////////////////////////////////
+		// Process all items for this tick before drawing the frame
+
+		// Process bullets
+		for (auto &bullet : bulletsOnScreen)
+		{
+			bullet.processBullet();
+		}
+
+		/////////////////////////////////////////////////////////
+		// Draw the frame
+
 		appWindow.clear();
 		appWindow.draw(gameBackgroundSprite);
+		for (auto &bullet : bulletsOnScreen)
+		{
+			appWindow.draw(bullet.sprite);
+		}
 		appWindow.draw(player.sprite);
 		appWindow.display();
 	}

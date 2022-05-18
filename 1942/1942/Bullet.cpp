@@ -26,14 +26,38 @@ Bullet::~Bullet(void)
 
 void Bullet::shoot(sf::RenderWindow &appWindow, sf::Sprite &bulletSprite)
 {
-	//float speed = 0.13;
+	float speed = 0.25;
+	velocity = sf::Vector2f(0, -speed);
 	
+	/*
+	std::vector<sf::Vector2f> pos;
 	sf::Vector2f bulletSpritePos = bulletSprite.getPosition();
-	while (bulletSpritePos.y >= 0)
+	sf::Vector2f direction(bulletSpritePos.x, -5);
+
+	pos.push_back(sf::Vector2f(bulletSpritePos));
+	appWindow.draw(bulletSprite);
+
+	if (bulletSpritePos.y >= -5)
 	{
-		bulletSprite.move(0, -5);
-		appWindow.draw(bulletSprite);
-		appWindow.display();
 		bulletSpritePos.y = bulletSpritePos.y - 5;
+		bulletSprite.setPosition(bulletSpritePos.x, bulletSpritePos.y);
+		appWindow.draw(bulletSprite);
 	}
+	*/
+	/*sf::Vector2f bulletSpritePos = bulletSprite.getPosition();
+	sf::Vector2i up(bulletSpritePos.x, -5);
+
+	float distanceX = up.x - bulletSpritePos.x;
+	float distanceY = (up.y - bulletSpritePos.y) * -1;
+	float angleRad = atan2(distanceX, distanceY);
+
+	sf::Vector2f direction(cos(angleRad), sin(angleRad));
+	velocity = direction * speed;*/
+}
+
+void Bullet::processBullet()
+{
+	auto currentPos = sprite.getPosition();
+	auto newPos = sf::Vector2f(currentPos.x + velocity.x, currentPos.y + velocity.y);
+	sprite.setPosition(newPos);
 }

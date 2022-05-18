@@ -8,10 +8,12 @@ class Bullet
 {
 public:
 	sf::Sprite sprite;
+	sf::Vector2f velocity;
 
 	Bullet::Bullet(float scaleX, float scaleY, float originX, float originY, float posX, float posY, sf::Texture &inputTexture);
 	~Bullet(void);
 
-	void Bullet::shoot(sf::RenderWindow &appWindow, sf::Sprite &bulletSprite);
+	void shoot(sf::RenderWindow &appWindow, sf::Sprite &bulletSprite);
+	void processBullet();
 };
 
