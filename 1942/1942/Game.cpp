@@ -10,6 +10,7 @@
 //using namespace std;
 
 // Global variables
+sf::Clock deltaClock;
 
 
 Game::Game(void)
@@ -62,7 +63,7 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 		std::cout << "Error: Loading image file for playerTexture has failed." << "\n";
 		system("pause");
 	}
-	Player player(playerScale.x, playerScale.y, playerOrigin.x, playerOrigin.y, playerPos.x, playerPos.y, playerTexture);
+	Player player(playerScale.x, playerScale.y, playerOrigin.x, playerOrigin.y, playerPos.x, playerPos.y, playerTexture, &deltaClock);
 
 		// Player Bullet
 	if (!playerBulletTexture.loadFromFile("Assets/1942_Player Bullet.png"))
@@ -78,6 +79,9 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 	// THE GAME LOOP
 	while (appWindow.isOpen())
 	{
+		float dt = deltaClock.restart().asSeconds();
+		std::cout << "dt = " << dt << "\n"; 
+
 		while (appWindow.pollEvent(event))
 		{
 			// Update state based on events
@@ -119,7 +123,7 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 				{
 					//std::cout << "The <S> key was pressed" << "\n";
 					playerBulletPos = player.sprite.getPosition();
-					Bullet playerBullet(playerBulletScale.x, playerBulletScale.y, playerBulletOrigin.x, playerBulletOrigin.y, playerBulletPos.x, playerBulletPos.y, playerBulletTexture);
+					Bullet playerBullet(playerBulletScale.x, playerBulletScale.y, playerBulletOrigin.x, playerBulletOrigin.y, playerBulletPos.x, playerBulletPos.y, playerBulletTexture, &deltaClock);
 					playerBullet.shoot(appWindow, playerBullet.sprite);
 					bulletsOnScreen.emplace_back(playerBullet);
 				}

@@ -10,7 +10,7 @@
 
 // Global variables
 
-Plane::Plane(float scaleX, float scaleY, float originX, float originY, float posX, float posY, sf::Texture &inputTexture)
+Plane::Plane(float scaleX, float scaleY, float originX, float originY, float posX, float posY, sf::Texture &inputTexture, sf::Clock *deltaClock)
 {
 	sprite = sf::Sprite(inputTexture);
 	sprite.setScale(scaleX, scaleY);
@@ -18,6 +18,7 @@ Plane::Plane(float scaleX, float scaleY, float originX, float originY, float pos
 	sprite.setPosition(posX, posY);
 	width = sprite.getGlobalBounds().width;
 	height = sprite.getGlobalBounds().height;
+	this->deltaClock = deltaClock;
 }
 
 
