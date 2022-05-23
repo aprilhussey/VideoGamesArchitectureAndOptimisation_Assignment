@@ -9,9 +9,7 @@
 //using namespace std;
 
 // Global variables
-float velocity = 4900.f;
-
-Player::Player(float scaleX, float scaleY, float originX, float originY, float posX, float posY, sf::Texture &inputTexture, sf::Clock *deltaClock) : Plane(scaleX, scaleY, originX, originY, posX, posY, inputTexture, deltaClock)
+Player::Player(float scaleX, float scaleY, float originX, float originY, float posX, float posY, float velocity, sf::Texture &inputTexture, sf::Clock *deltaClock) : Plane(scaleX, scaleY, originX, originY, posX, posY, velocity, inputTexture, deltaClock)
 {
 }
 

@@ -7,7 +7,7 @@
 class Player: public Plane
 {
 public:
-	Player(float scaleX, float scaleY, float originX, float originY, float posX, float posY, sf::Texture &inputTexture, sf::Clock *deltaClock);
+	Player(float scaleX, float scaleY, float originX, float originY, float posX, float posY, float velocity, sf::Texture &inputTexture, sf::Clock *deltaClock);
 	~Player(void);
 
 	void moveLeft();

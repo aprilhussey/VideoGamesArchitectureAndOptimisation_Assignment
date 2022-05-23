@@ -11,8 +11,9 @@ public:
 	float width;
 	float height;
 	sf::Clock *deltaClock;
+	float velocity;
 
-	Plane(float scaleX, float scaleY, float originX, float originY, float posX, float posY, sf::Texture &inputTexture, sf::Clock *deltaClock);
+	Plane(float scaleX, float scaleY, float originX, float originY, float posX, float posY, float velocity, sf::Texture &inputTexture, sf::Clock *deltaClock);
 
 	~Plane(void);
 };
