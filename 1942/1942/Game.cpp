@@ -6,6 +6,8 @@
 #include "Player.h"
 #include "Bullet.h"
 #include "Enemy.h"
+#include "Win.h"
+#include "Lose.h"
 
 // Complier Directives
 //using namespace std;
@@ -29,14 +31,6 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 		// Game Background
 	sf::Vector2f gameBackgroundScale(1.f, 1.f);
 	sf::Vector2f gameBackgroundPos(0, 0);
-
-		// You Win
-	sf::Vector2f youWinScale(1, 1);
-	sf::Vector2f youWinPos(0, 0);
-
-		// You Lose
-	sf::Vector2f youLoseScale(1, 1);
-	sf::Vector2f youLosePos(0, 0);
 
 		// Player
 	sf::Vector2f playerScale(1.f, 1.f);
@@ -75,28 +69,6 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 	sf::Sprite gameBackgroundSprite(gameBackgroundTexture);
 	gameBackgroundSprite.setScale(gameBackgroundScale);
 	gameBackgroundSprite.setPosition(gameBackgroundPos);
-
-		// You Win
-	sf::Texture youWinTexture;
-	if (!youWinTexture.loadFromFile("Assets/1942_You Win.png"))
-	{
-		std::cout << "Error: Loading image file for youWinTexture has failed." << "\n";
-		system("pause");
-	}
-	sf::Sprite youWinSprite(youWinTexture);
-	youWinSprite.setScale(youWinScale);
-	youWinSprite.setPosition(youWinPos);
-
-		// You Lose
-	sf::Texture youLoseTexture;
-	if (!youLoseTexture.loadFromFile("Assets/1942_You Lose.png"))
-	{
-		std::cout << "Error: Loading image file for youLoseTexture has failed." << "\n";
-		system("pause");
-	}
-	sf::Sprite youLoseSprite(youLoseTexture);
-	youLoseSprite.setScale(youLoseScale);
-	youLoseSprite.setPosition(youLosePos);
 
 		// Player
 	if (!playerTexture.loadFromFile("Assets/1942_Player.png"))
@@ -191,7 +163,7 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 			bullet.processBullet();
 			if (bullet.sprite.getGlobalBounds().intersects(enemy.sprite.getGlobalBounds()))
 			{
-				std::cout << "Bullet collision";
+				std::cout << "Bullet collision" << "\n";
 				enemyKilled = true;
 			}
 		}
@@ -199,7 +171,7 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 		// Process player collision with enemy
 		if (player.sprite.getGlobalBounds().intersects(enemy.sprite.getGlobalBounds()))
 		{
-			std::cout << "Player collision with enemy";
+			std::cout << "Player collision with enemy" << "\n";
 			playerKilled = true;
 		}
 
@@ -219,7 +191,8 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 		else
 		{
 			appWindow.clear();
-			appWindow.draw(youLoseSprite);
+			Lose lose;
+			lose.run(appWindow, event);
 		}
 
 		if (!enemyKilled)	// If the enemy is not killed, draw it
@@ -229,7 +202,8 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 		else
 		{
 			appWindow.clear();
-			appWindow.draw(youWinSprite);
+			Win win;
+			win.run(appWindow, event);
 		}
 		appWindow.display();
 	}
