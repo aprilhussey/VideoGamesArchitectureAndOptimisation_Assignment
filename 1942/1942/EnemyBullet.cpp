@@ -2,11 +2,15 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
-#include "Bullet.h"
-#include "Player.h"
+#include "EnemyBullet.h"
 #include "Game.h"
 
-Bullet::Bullet(float scaleX, float scaleY, float originX, float originY, float posX, float posY, sf::Texture &inputTexture, sf::Clock *deltaClock)
+// Complier Directives
+//using namespace std;
+
+// Global variables
+
+EnemyBullet::EnemyBullet(float scaleX, float scaleY, float originX, float originY, float posX, float posY, sf::Texture &inputTexture, sf::Clock *deltaClock)
 {
 	sprite = sf::Sprite(inputTexture);
 	sprite.setScale(scaleX, scaleY);
@@ -15,18 +19,17 @@ Bullet::Bullet(float scaleX, float scaleY, float originX, float originY, float p
 	this->deltaClock = deltaClock;
 }
 
-
-Bullet::~Bullet(void)
+EnemyBullet::~EnemyBullet(void)
 {
 }
 
-void Bullet::shoot(sf::RenderWindow &appWindow, sf::Sprite &bulletSprite)
+void EnemyBullet::shoot(sf::RenderWindow &appWindow, sf::Sprite &bulletSprite)
 {
 	float speed = 4900.f;
-	velocity = sf::Vector2f(0, -speed);
+	velocity = sf::Vector2f(0, speed);
 }
 
-void Bullet::processBullet()
+void EnemyBullet::processBullet()
 {
 	auto currentPos = sprite.getPosition();
 	auto newPos = sf::Vector2f(currentPos.x + (velocity.x * deltaClock->getElapsedTime().asSeconds()), currentPos.y + (velocity.y * deltaClock->getElapsedTime().asSeconds()));

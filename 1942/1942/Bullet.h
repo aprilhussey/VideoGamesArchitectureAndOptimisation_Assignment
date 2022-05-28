@@ -16,5 +16,6 @@ public:
 
 	void shoot(sf::RenderWindow &appWindow, sf::Sprite &bulletSprite);
 	void processBullet();
+	void enemyShoot(sf::RenderWindow &appWindow, sf::Sprite &bulletSprite);
+	void processEnemyBullet();
 };
-

@@ -8,7 +8,6 @@
 // Complier Directives
 //using namespace std;
 
-// Global variables
 Player::Player(float scaleX, float scaleY, float originX, float originY, float posX, float posY, float velocity, sf::Texture &inputTexture, sf::Clock *deltaClock) : Plane(scaleX, scaleY, originX, originY, posX, posY, velocity, inputTexture, deltaClock)
 {
 }

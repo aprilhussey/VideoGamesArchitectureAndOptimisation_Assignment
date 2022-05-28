@@ -1,6 +1,7 @@
 // Header Files
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <random>
 
 #include "Game.h"
 #include "Player.h"
@@ -8,21 +9,29 @@
 #include "Enemy.h"
 #include "Win.h"
 #include "Lose.h"
+#include "EnemyBullet.h"
 
 // Complier Directives
 //using namespace std;
 
-// Global variables
-sf::Clock deltaClock;
-
-
-Game::Game(void)
+Game::Game(sf::Clock *deltaClock)
 {
+	this->deltaClock = deltaClock;
 }
 
 
 Game::~Game(void)
 {
+}
+
+int Game::getRandomNum()
+{
+	std::random_device rd;	// Creates a random device called rd
+	std::uniform_int_distribution<int> distribution(1, 1000);	// Generates number in the range 1 - 1000
+	int randomNum = distribution(rd);
+	//std::cout << randomNum << "\n";
+
+	return randomNum;
 }
 
 void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
@@ -52,9 +61,14 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 	sf::Vector2f enemyPos(300.f, 200.f);
 	sf::Texture enemyTexture;
 
+		// Enemy Bullet
+	sf::Vector2f enemyBulletScale(1.f, 1.f);
+	sf::Vector2f enemyBulletOrigin(45.f/2, 7.f/2);
+	sf::Vector2f enemyBulletPos;
+	sf::Texture enemyBulletTexture;
+
 	bool enemyKilled = false;
 	bool playerKilled = false;
-
 
 	////////// ////////// ////////// ////////// //////////
 
@@ -76,7 +90,7 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 		std::cout << "Error: Loading image file for playerTexture has failed." << "\n";
 		system("pause");
 	}
-	Player player(playerScale.x, playerScale.y, playerOrigin.x, playerOrigin.y, playerPos.x, playerPos.y, 4900.0f, playerTexture, &deltaClock);
+	Player player(playerScale.x, playerScale.y, playerOrigin.x, playerOrigin.y, playerPos.x, playerPos.y, 4900.0f, playerTexture, deltaClock);
 
 		// Player Bullet
 	if (!playerBulletTexture.loadFromFile("Assets/1942_Player Bullet.png"))
@@ -93,18 +107,37 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 		std::cout << "Error: Loading image file for enemyTexture has failed." << "\n";
 		system("pause");
 	}
-	Enemy enemy(enemyScale.x, enemyScale.y, enemyOrigin.x, enemyOrigin.y, enemyPos.x, enemyPos.y, 3500.0f, enemyTexture, &deltaClock);
+	Enemy enemy(enemyScale.x, enemyScale.y, enemyOrigin.x, enemyOrigin.y, enemyPos.x, enemyPos.y, 3500.0f, enemyTexture, deltaClock);
 	
+		// Enemy Bullet
+	if (!enemyBulletTexture.loadFromFile("Assets/1942_Enemy Bullet.png"))
+	{
+		std::cout << "Error: Loading image file for enemyBulletTexture has failed." << "\n";
+		system("pause");
+	}
+
+	std::vector<EnemyBullet> enemyBulletsOnScreen;
 
 	////////// ////////// ////////// ////////// //////////
 
 	// THE GAME LOOP
 	while (appWindow.isOpen())
 	{
-		float dt = deltaClock.restart().asSeconds();
+		// How much time since last loop?
+		float dt = deltaClock->restart().asSeconds();
 		std::cout << "dt = " << dt << "\n"; 
 
 		enemy.moveHorizontally();
+
+		int randomNumber = getRandomNum();
+		if (randomNumber <= 15)
+		{
+			enemyBulletPos = enemy.sprite.getPosition();
+			EnemyBullet enemyBullet(enemyBulletScale.x, enemyBulletScale.y, enemyBulletOrigin.x, enemyBulletOrigin.y, enemyBulletPos.x, enemyBulletPos.y, enemyBulletTexture, deltaClock);
+			enemyBullet.sprite.setRotation(180);
+			enemyBullet.shoot(appWindow, enemyBullet.sprite);
+			enemyBulletsOnScreen.emplace_back(enemyBullet);
+		}
 
 		while (appWindow.pollEvent(event))
 		{
@@ -147,7 +180,7 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 				{
 					//std::cout << "The <S> key was pressed" << "\n";
 					playerBulletPos = player.sprite.getPosition();
-					Bullet playerBullet(playerBulletScale.x, playerBulletScale.y, playerBulletOrigin.x, playerBulletOrigin.y, playerBulletPos.x, playerBulletPos.y, playerBulletTexture, &deltaClock);
+					Bullet playerBullet(playerBulletScale.x, playerBulletScale.y, playerBulletOrigin.x, playerBulletOrigin.y, playerBulletPos.x, playerBulletPos.y, playerBulletTexture, deltaClock);
 					playerBullet.shoot(appWindow, playerBullet.sprite);
 					bulletsOnScreen.emplace_back(playerBullet);
 				}
@@ -163,8 +196,18 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 			bullet.processBullet();
 			if (bullet.sprite.getGlobalBounds().intersects(enemy.sprite.getGlobalBounds()))
 			{
-				std::cout << "Bullet collision" << "\n";
+				std::cout << "Bullet collision with enemy" << "\n";
 				enemyKilled = true;
+			}
+		}
+
+		for (auto &enemybullet : enemyBulletsOnScreen)
+		{
+			enemybullet.processBullet();
+			if (player.sprite.getGlobalBounds().intersects(enemybullet.sprite.getGlobalBounds()))
+			{
+				std::cout << "Bullet collision with player" << "\n";
+				playerKilled = true;
 			}
 		}
 
@@ -180,10 +223,17 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 
 		appWindow.clear();
 		appWindow.draw(gameBackgroundSprite);
+
 		for (auto &bullet : bulletsOnScreen)
 		{
 			appWindow.draw(bullet.sprite);
 		}
+
+		for (auto &enemybullet : enemyBulletsOnScreen)
+		{
+			appWindow.draw(enemybullet.sprite);
+		}
+
 		if (!playerKilled)	// If the player is not killed, draw it
 		{
 			appWindow.draw(player.sprite);
@@ -191,7 +241,7 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 		else
 		{
 			appWindow.clear();
-			Lose lose;
+			Lose lose(deltaClock);
 			lose.run(appWindow, event);
 		}
 
@@ -202,7 +252,7 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 		else
 		{
 			appWindow.clear();
-			Win win;
+			Win win(deltaClock);
 			win.run(appWindow, event);
 		}
 		appWindow.display();

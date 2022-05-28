@@ -9,9 +9,9 @@
 class Lose
 {
 public:
-	//sf::Clock *deltaClock;
+	sf::Clock *deltaClock;
 
-	Lose(void);
+	Lose(sf::Clock *deltaClock);
 	~Lose(void);
 	void run(sf::RenderWindow& appWindow, sf::Event& event);
 };

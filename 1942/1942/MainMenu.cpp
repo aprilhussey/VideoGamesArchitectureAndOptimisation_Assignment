@@ -8,11 +8,9 @@
 // Complier Directives
 //using namespace std;
 
-// Global variables
-
-
-MainMenu::MainMenu(void)
+MainMenu::MainMenu(sf::Clock *deltaClock)
 {
+	this->deltaClock = deltaClock;
 }
 
 
@@ -28,21 +26,29 @@ void MainMenu::run(sf::RenderWindow& appWindow, sf::Event& event)
 		// Main Menu Background
 	sf::Vector2f mainMenuBackgroundScale(1.f, 1.f);
 	sf::Vector2f mainMenuBackgroundPos(0, 0);
-		
-		// Press Enter to Start
-	sf::Text pressToStart;
-	sf::Font font;
-	if (!font.loadFromFile("Assets/Blocktopia.ttf"))
+
+		// Blocktopia Font
+	sf::Font blocktopiaFont;
+	if (!blocktopiaFont.loadFromFile("Assets/Blocktopia.ttf"))
 	{
 		std::cout << "Error: Loading font file for font has failed." << "\n";
 		system("pause");
 	}
-	pressToStart.setFont(font);
+		
+		// Press Enter to Start
+	sf::Text pressToStart;
+	pressToStart.setFont(blocktopiaFont);
 	pressToStart.setFillColor(sf::Color::White);
 	pressToStart.setStyle(sf::Text::Regular);
 	pressToStart.setString("P R E S S  E N T E R\n    T O  S T A R T");
 	pressToStart.setCharacterSize(30);
 	pressToStart.setPosition(181.5, 440.f);
+
+	bool incrementing = true;
+
+		// Duration to control animation speed
+	int currentColor = 0;
+	//float duration = float();
 
 	// Load graphics
 		// Main Menu Background
@@ -56,19 +62,12 @@ void MainMenu::run(sf::RenderWindow& appWindow, sf::Event& event)
 	mainMenuBackgroundSprite.setScale(mainMenuBackgroundScale);
 	mainMenuBackgroundSprite.setPosition(mainMenuBackgroundPos);
 
-	// Clock to measure overall timing
-	sf::Clock clock;
-
-	// Duration to control animation speed
-	int currentColor = 0;
-	float duration = float();
-
 	//THE MAIN MENU LOOP
 	while (appWindow.isOpen())
 	{
 		// How much time since last loop?
-		sf::Time dt = clock.restart();
-		duration += dt.asSeconds();
+		float dt = deltaClock->restart().asSeconds();
+		//std::cout << "dt = " << dt << "\n"; 
 
 		while (appWindow.pollEvent(event))
 		{
@@ -88,30 +87,36 @@ void MainMenu::run(sf::RenderWindow& appWindow, sf::Event& event)
 				if (event.key.code == 58)	// If <ENTER> is pressed, start the game.
 				{
 					//std::cout << "The <ENTER> key was pressed" << "\n";
-					Game game;
+					Game game(deltaClock);
 					game.run(appWindow, event);
 				}
 			}
 		}
 		// Animation duration per frame (0.1f) reached
-		if (duration > 0.01f)
+		if (dt > 0.01f)
 		{
 			//Restart calculation of the duration
-			duration = 0;
+			dt = 0;
 
 			//Loop through the animation colors
-			if (currentColor < 255)
+			if (currentColor == 0)
+			{
+				incrementing = true;
+			}
+			else if (currentColor == 255)
+			{
+				incrementing = false;
+			}
+			if (incrementing)
 			{
 				currentColor += 5;
 			}
 			else
 			{
-				// Start from first frame if last frame reached
-				currentColor = 0;
+				currentColor -= 5;
 			}
 			pressToStart.setFillColor(sf::Color(currentColor, currentColor, currentColor));
 		}
-
 		appWindow.clear();
 		appWindow.draw(mainMenuBackgroundSprite);
 		appWindow.draw(pressToStart);

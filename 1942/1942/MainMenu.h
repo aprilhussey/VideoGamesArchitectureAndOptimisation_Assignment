@@ -7,7 +7,9 @@
 class MainMenu
 {
 public:
-	MainMenu(void);
+	sf::Clock *deltaClock;
+
+	MainMenu(sf::Clock *deltaClock);
 	~MainMenu(void);
 	void run(sf::RenderWindow& appWindow, sf::Event& event);
 };
