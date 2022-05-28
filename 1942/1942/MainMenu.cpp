@@ -4,6 +4,7 @@
 
 #include "MainMenu.h"
 #include "Game.h"
+#include "Quit.h"
 
 // Complier Directives
 //using namespace std;
@@ -80,10 +81,12 @@ void MainMenu::run(sf::RenderWindow& appWindow, sf::Event& event)
 			{
 				std::cout << event.key.code << "\n";
 				////////// ////////// ////////// ////////// //////////
-				/*if (event.key.code == 36)	// If <ESC> is pressed, pause the game.
+				if (event.key.code == 36)	// If <ESC> is pressed, load quit.
 				{
 					//std::cout << "The <ESC> key was pressed" << "\n";
-				}*/
+					Quit quit(deltaClock);
+					quit.run(appWindow, event);
+				}
 				if (event.key.code == 58)	// If <ENTER> is pressed, start the game.
 				{
 					//std::cout << "The <ENTER> key was pressed" << "\n";

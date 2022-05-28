@@ -1,32 +1,33 @@
 //Header Files
 #include <iostream>
 #include <SFML/Graphics.hpp>
-#include "Lose.h"
+#include "Paused.h"
 #include "Game.h"
+#include "MainMenu.h"
 
 // Complier Directives
 //using namespace std;
 
 // Global variables
 
-Lose::Lose(sf::Clock *deltaClock)
+Paused::Paused (sf::Clock *deltaClock)
 {
 	this->deltaClock = deltaClock;
 }
 
 
-Lose::~Lose(void)
+Paused::~Paused(void)
 {
 }
 
-void Lose::run(sf::RenderWindow& appWindow, sf::Event& event)
+bool Paused::run(sf::RenderWindow& appWindow, sf::Event& event)
 {
 	appWindow.setFramerateLimit(30);
 
 	// Local variables
-		// You Lose
-	sf::Vector2f youLoseScale(1, 1);
-	sf::Vector2f youLosePos(0, 0);
+		// Paused
+	sf::Vector2f pausedScale(1, 1);
+	sf::Vector2f pausedPos(0, 0);
 
 		// Blocktopia Font
 	sf::Font blocktopiaFont;
@@ -36,7 +37,7 @@ void Lose::run(sf::RenderWindow& appWindow, sf::Event& event)
 		system("pause");
 	}
 
-	bool rtSelected = true;
+	bool rsSelected = true;
 
 	bool incrementing = true;
 
@@ -45,25 +46,25 @@ void Lose::run(sf::RenderWindow& appWindow, sf::Event& event)
 	////////// ////////// ////////// ////////// //////////
 
 	// Load graphics
-		// You Lose
-	sf::Texture youLoseTexture;
-	if (!youLoseTexture.loadFromFile("Assets/1942_You Lose.png"))
+		// Paused
+	sf::Texture pausedTexture;
+	if (!pausedTexture.loadFromFile("Assets/1942_Paused.png"))
 	{
-		std::cout << "Error: Loading image file for youLoseTexture has failed." << "\n";
+		std::cout << "Error: Loading image file for pausedTexture has failed." << "\n";
 		system("pause");
 	}
-	sf::Sprite youLoseSprite(youLoseTexture);
-	youLoseSprite.setScale(youLoseScale);
-	youLoseSprite.setPosition(youLosePos);
+	sf::Sprite pausedSprite(pausedTexture);
+	pausedSprite.setScale(pausedScale);
+	pausedSprite.setPosition(pausedPos);
 
-		// Retry TXT
-	sf::Text retryTXT;
-	retryTXT.setFont(blocktopiaFont);
-	retryTXT.setFillColor(sf::Color::White);
-	retryTXT.setStyle(sf::Text::Regular);
-	retryTXT.setString("R E T R Y");
-	retryTXT.setCharacterSize(30);
-	retryTXT.setPosition(244, 440.f);
+		// Resume TXT
+	sf::Text resumeTXT;
+	resumeTXT.setFont(blocktopiaFont);
+	resumeTXT.setFillColor(sf::Color::White);
+	resumeTXT.setStyle(sf::Text::Regular);
+	resumeTXT.setString("R E S U M E");
+	resumeTXT.setCharacterSize(30);
+	resumeTXT.setPosition(228.5, 440.f);
 
 		// Main Menu TXT
 	sf::Text mainMenuTXT;
@@ -76,9 +77,10 @@ void Lose::run(sf::RenderWindow& appWindow, sf::Event& event)
 
 	////////// ////////// ////////// ////////// //////////
 
-	// THE LOSE LOOP
+	// THE WIN LOOP
 	while (appWindow.isOpen())
 	{
+		// How much time since last loop?
 		float dt = deltaClock->restart().asSeconds();
 		//std::cout << "dt = " << dt << "\n"; 
 
@@ -94,24 +96,23 @@ void Lose::run(sf::RenderWindow& appWindow, sf::Event& event)
 				if (event.key.code == 74)	// If <DOWN ARROW> is pressed, 
 				{
 					std::cout << "The <DOWN ARROW> key was pressed" << "\n";
-					rtSelected = false;
-					retryTXT.setFillColor(sf::Color::White);
+					rsSelected = false;
+					resumeTXT.setFillColor(sf::Color::White);
 				}
 				else if (event.key.code == 73)	// If <UP ARROW> is pressed,
 				{
 					std::cout << "The <UP ARROW> key was pressed" << "\n";
-					rtSelected = true;
+					rsSelected = true;
 					mainMenuTXT.setFillColor(sf::Color::White);
 				}
 				if (event.key.code == 58)	// If <ENTER> is pressed,
 				{
-					if (rtSelected)
+					if (rsSelected)
 					{
-						// Same level runs
-						Game game(deltaClock);
-						game.run(appWindow, event);
+						// Return to game
+						return false;
 					}
-					else if (!rtSelected)
+					else if (!rsSelected)
 					{
 						// Main Menu runs
 						MainMenu mainMenu(deltaClock);
@@ -124,7 +125,7 @@ void Lose::run(sf::RenderWindow& appWindow, sf::Event& event)
 		/////////////////////////////////////////////////////////
 		// Draw the frame
 		
-		if (rtSelected)
+		if (rsSelected)
 		{
 			// Animation duration per frame (0.1f) reached
 			if (dt > 0.01f)
@@ -149,10 +150,10 @@ void Lose::run(sf::RenderWindow& appWindow, sf::Event& event)
 				{
 					currentColor -= 5;
 				}
-				retryTXT.setFillColor(sf::Color(currentColor, currentColor, currentColor));
+				resumeTXT.setFillColor(sf::Color(currentColor, currentColor, currentColor));
 			}
 		}
-		else if (!rtSelected)
+		else if (!rsSelected)
 		{
 			// Animation duration per frame (0.1f) reached
 			if (dt > 0.01f)
@@ -181,8 +182,8 @@ void Lose::run(sf::RenderWindow& appWindow, sf::Event& event)
 			}
 		}
 		appWindow.clear();
-		appWindow.draw(youLoseSprite);
-		appWindow.draw(retryTXT);
+		appWindow.draw(pausedSprite);
+		appWindow.draw(resumeTXT);
 		appWindow.draw(mainMenuTXT);
 		appWindow.display();
 	}

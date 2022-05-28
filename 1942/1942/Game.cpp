@@ -10,6 +10,7 @@
 #include "Win.h"
 #include "Lose.h"
 #include "EnemyBullet.h"
+#include "Paused.h"
 
 // Complier Directives
 //using namespace std;
@@ -69,6 +70,11 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 
 	bool enemyKilled = false;
 	bool playerKilled = false;
+
+	int playerHealth = 5;
+	int enemyHealth = 30;
+
+	bool bulletCollided = false;
 
 	////////// ////////// ////////// ////////// //////////
 
@@ -150,10 +156,11 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 			{
 				//std::cout << event.key.code << "\n";
 				////////// ////////// ////////// ////////// //////////
-				if (event.key.code == 36)	// If <ESC> is pressed, pause the game. Currently exits.
+				if (event.key.code == 36)	// If <ESC> is pressed, pause the game.
 				{
 					//std::cout << "The <ESC> key was pressed" << "\n";
-					appWindow.close();
+					Paused paused(deltaClock);
+					paused.run(appWindow, event);
 				}
 				if (event.key.code == 71)	// If <LEFT ARROW> is pressed, move forward.
 				{
@@ -194,20 +201,35 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 		for (auto &bullet : bulletsOnScreen)
 		{
 			bullet.processBullet();
+			// Process enemy collision with player bullets
 			if (bullet.sprite.getGlobalBounds().intersects(enemy.sprite.getGlobalBounds()))
 			{
 				std::cout << "Bullet collision with enemy" << "\n";
-				enemyKilled = true;
+				std::cout << enemyHealth << "\n"; //fjf
+				enemyHealth = enemyHealth - 1;
+				std::cout << enemyHealth << "\n"; //fjf
+				system("pause");
+				bulletCollided = true;
+				if (enemyHealth == 0)
+				{
+					enemyKilled = true;
+				}
 			}
 		}
 
+		// Process enemy bullets
 		for (auto &enemybullet : enemyBulletsOnScreen)
 		{
 			enemybullet.processBullet();
+			// Process player collision with enemy bullets
 			if (player.sprite.getGlobalBounds().intersects(enemybullet.sprite.getGlobalBounds()))
 			{
 				std::cout << "Bullet collision with player" << "\n";
-				playerKilled = true;
+				playerHealth = playerHealth - 1;
+				if (playerHealth == 0)
+				{
+					playerKilled = true;
+				}
 			}
 		}
 
@@ -215,7 +237,11 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 		if (player.sprite.getGlobalBounds().intersects(enemy.sprite.getGlobalBounds()))
 		{
 			std::cout << "Player collision with enemy" << "\n";
-			playerKilled = true;
+			playerHealth = playerHealth - 1;
+			if (playerHealth == 0)
+			{
+				playerKilled = true;
+			}
 		}
 
 		/////////////////////////////////////////////////////////
@@ -226,7 +252,14 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 
 		for (auto &bullet : bulletsOnScreen)
 		{
-			appWindow.draw(bullet.sprite);
+			if (!bulletCollided)
+			{
+				appWindow.draw(bullet.sprite);
+			}
+			else if (bulletCollided)
+			{
+				bulletCollided = true;
+			}
 		}
 
 		for (auto &enemybullet : enemyBulletsOnScreen)
