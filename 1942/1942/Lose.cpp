@@ -80,7 +80,6 @@ void Lose::run(sf::RenderWindow& appWindow, sf::Event& event)
 	while (appWindow.isOpen())
 	{
 		float dt = deltaClock->restart().asSeconds();
-		//std::cout << "dt = " << dt << "\n"; 
 
 		while (appWindow.pollEvent(event))
 		{

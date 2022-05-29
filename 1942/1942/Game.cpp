@@ -12,9 +12,6 @@
 #include "EnemyBullet.h"
 #include "Paused.h"
 
-// Complier Directives
-//using namespace std;
-
 Game::Game(sf::Clock *deltaClock)
 {
 	this->deltaClock = deltaClock;
@@ -30,7 +27,6 @@ int Game::getRandomNum()
 	std::random_device rd;	// Creates a random device called rd
 	std::uniform_int_distribution<int> distribution(1, 1000);	// Generates number in the range 1 - 1000
 	int randomNum = distribution(rd);
-	//std::cout << randomNum << "\n";
 
 	return randomNum;
 }
@@ -154,7 +150,6 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 			}
 			else if (event.type == sf::Event::KeyPressed)
 			{
-				//std::cout << event.key.code << "\n";
 				////////// ////////// ////////// ////////// //////////
 				if (event.key.code == 36)	// If <ESC> is pressed, pause the game.
 				{

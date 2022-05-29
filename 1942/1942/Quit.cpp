@@ -5,9 +5,6 @@
 #include "Game.h"
 #include "MainMenu.h"
 
-// Complier Directives
-//using namespace std;
-
 // Global variables
 
 Quit::Quit(sf::Clock *deltaClock)
@@ -82,7 +79,6 @@ void Quit::run(sf::RenderWindow& appWindow, sf::Event& event)
 	{
 		// How much time since last loop?
 		float dt = deltaClock->restart().asSeconds();
-		//std::cout << "dt = " << dt << "\n"; 
 
 		while (appWindow.pollEvent(event))
 		{

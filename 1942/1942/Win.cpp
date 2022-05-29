@@ -82,7 +82,6 @@ void Win::run(sf::RenderWindow& appWindow, sf::Event& event)
 	{
 		// How much time since last loop?
 		float dt = deltaClock->restart().asSeconds();
-		//std::cout << "dt = " << dt << "\n"; 
 
 		while (appWindow.pollEvent(event))
 		{

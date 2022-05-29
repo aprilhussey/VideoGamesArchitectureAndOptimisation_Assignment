@@ -6,9 +6,6 @@
 #include "Game.h"
 #include "Quit.h"
 
-// Complier Directives
-//using namespace std;
-
 MainMenu::MainMenu(sf::Clock *deltaClock)
 {
 	this->deltaClock = deltaClock;
@@ -49,7 +46,6 @@ void MainMenu::run(sf::RenderWindow& appWindow, sf::Event& event)
 
 		// Duration to control animation speed
 	int currentColor = 0;
-	//float duration = float();
 
 	// Load graphics
 		// Main Menu Background
@@ -68,7 +64,6 @@ void MainMenu::run(sf::RenderWindow& appWindow, sf::Event& event)
 	{
 		// How much time since last loop?
 		float dt = deltaClock->restart().asSeconds();
-		//std::cout << "dt = " << dt << "\n"; 
 
 		while (appWindow.pollEvent(event))
 		{
@@ -83,13 +78,11 @@ void MainMenu::run(sf::RenderWindow& appWindow, sf::Event& event)
 				////////// ////////// ////////// ////////// //////////
 				if (event.key.code == 36)	// If <ESC> is pressed, load quit.
 				{
-					//std::cout << "The <ESC> key was pressed" << "\n";
 					Quit quit(deltaClock);
 					quit.run(appWindow, event);
 				}
 				if (event.key.code == 58)	// If <ENTER> is pressed, start the game.
 				{
-					//std::cout << "The <ENTER> key was pressed" << "\n";
 					Game game(deltaClock);
 					game.run(appWindow, event);
 				}

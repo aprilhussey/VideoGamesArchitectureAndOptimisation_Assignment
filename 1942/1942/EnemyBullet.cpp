@@ -5,9 +5,6 @@
 #include "EnemyBullet.h"
 #include "Game.h"
 
-// Complier Directives
-//using namespace std;
-
 // Global variables
 
 EnemyBullet::EnemyBullet(float scaleX, float scaleY, float originX, float originY, float posX, float posY, sf::Texture &inputTexture, sf::Clock *deltaClock)

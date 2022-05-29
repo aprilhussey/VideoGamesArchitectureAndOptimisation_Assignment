@@ -3,9 +3,6 @@
 #include <SFML/Graphics.hpp>
 #include "MainMenu.h"
 
-// Complier Directives
-//using namespace std;
-
 // Global variables
 sf::Event event;
 sf::Clock deltaClock;

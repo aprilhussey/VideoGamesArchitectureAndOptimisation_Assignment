@@ -4,9 +4,6 @@
 
 #include "Plane.h"
 
-// Complier Directives
-//using namespace std;
-
 Plane::Plane(float scaleX, float scaleY, float originX, float originY, float posX, float posY, float velocity, sf::Texture &inputTexture, sf::Clock *deltaClock)
 {
 	sprite = sf::Sprite(inputTexture);
