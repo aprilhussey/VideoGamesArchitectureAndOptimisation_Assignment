@@ -35,3 +35,9 @@ void EnemyBullet::processBullet()
 	auto newPos = sf::Vector2f(currentPos.x + (velocity.x * deltaClock->getElapsedTime().asSeconds()), currentPos.y + (velocity.y * deltaClock->getElapsedTime().asSeconds()));
 	sprite.setPosition(newPos);
 }
+
+bool EnemyBullet::operator == (const EnemyBullet &bullet)
+{
+	// If velocity and position are equal then they are in this case the same bullet
+	return this->velocity == bullet.velocity && this->sprite.getPosition() == bullet.sprite.getPosition();
+}

@@ -158,34 +158,28 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 				////////// ////////// ////////// ////////// //////////
 				if (event.key.code == 36)	// If <ESC> is pressed, pause the game.
 				{
-					//std::cout << "The <ESC> key was pressed" << "\n";
 					Paused paused(deltaClock);
 					paused.run(appWindow, event);
 				}
 				if (event.key.code == 71)	// If <LEFT ARROW> is pressed, move forward.
 				{
-					//std::cout << "The <LEFT ARROW> key was pressed" << "\n";
 					player.moveLeft();
 				}
 				if (event.key.code == 72)	// If <RIGHT ARROW> is pressed, move forward.
 				{
-					//std::cout << "The <RIGHT ARROW> key was pressed" << "\n";
 					player.moveRight();
 				}
 				if (event.key.code == 73)	// If <UP ARROW> is pressed, move forward.
 				{
-					//::cout << "The <UP ARROW> key was pressed" << "\n";
 					player.moveForward();
 				}
 				if (event.key.code == 74)	// If <DOWN ARROW> is pressed, move backward.
 				{
-					//std::cout << "The <DOWN ARROW> key was pressed" << "\n";
 					player.moveBackward();
 				}
 				////////// ////////// ////////// ////////// //////////
 				if (event.key.code == 18)	// If <S> is pressed, shoot bullets.
 				{
-					//std::cout << "The <S> key was pressed" << "\n";
 					playerBulletPos = player.sprite.getPosition();
 					Bullet playerBullet(playerBulletScale.x, playerBulletScale.y, playerBulletOrigin.x, playerBulletOrigin.y, playerBulletPos.x, playerBulletPos.y, playerBulletTexture, deltaClock);
 					playerBullet.shoot(appWindow, playerBullet.sprite);
@@ -223,6 +217,7 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 		bulletsToDelete.clear(); // Ensure cleared as full of broken references
 
 		// Process enemy bullets
+		std::vector<EnemyBullet*> enemyBulletsToDelete;
 		for (auto &enemybullet : enemyBulletsOnScreen)
 		{
 			enemybullet.processBullet();
@@ -235,8 +230,15 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 				{
 					playerKilled = true;
 				}
+				enemyBulletsToDelete.emplace_back(&enemybullet);
 			}
 		}
+		// Remove each bullet that has collided from the enemybullets on screen vector
+		for (auto enemybullet : enemyBulletsToDelete)
+		{
+			enemyBulletsOnScreen.erase(std::remove(enemyBulletsOnScreen.begin(), enemyBulletsOnScreen.end(), *enemybullet), enemyBulletsOnScreen.end());
+		}
+		enemyBulletsToDelete.clear(); // Ensure cleared as full of broken references
 
 		// Process player collision with enemy
 		if (player.sprite.getGlobalBounds().intersects(enemy.sprite.getGlobalBounds()))
