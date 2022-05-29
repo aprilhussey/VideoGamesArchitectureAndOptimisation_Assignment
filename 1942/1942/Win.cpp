@@ -110,6 +110,8 @@ void Win::run(sf::RenderWindow& appWindow, sf::Event& event)
 					if (nlSelected)
 					{
 						// Next Level runs
+						Game game(deltaClock);
+						game.run(appWindow, event);
 					}
 					else if (!nlSelected)
 					{
