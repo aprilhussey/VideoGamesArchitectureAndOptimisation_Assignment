@@ -20,7 +20,7 @@ Bullet::~Bullet(void)
 {
 }
 
-bool Bullet::operator ==(const Bullet &bullet)
+bool Bullet::operator == (const Bullet &bullet)
 {
 	// If velocity and position are equal then they are in this case the same bullet
 	return this->velocity == bullet.velocity && this->sprite.getPosition() == bullet.sprite.getPosition();

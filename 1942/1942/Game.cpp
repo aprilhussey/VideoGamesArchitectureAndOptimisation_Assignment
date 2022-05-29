@@ -113,7 +113,7 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 		std::cout << "Error: Loading image file for enemyTexture has failed." << "\n";
 		system("pause");
 	}
-	Enemy enemy(enemyScale.x, enemyScale.y, enemyOrigin.x, enemyOrigin.y, enemyPos.x, enemyPos.y, 1000.0f, enemyTexture, deltaClock);
+	Enemy enemy(enemyScale.x, enemyScale.y, enemyOrigin.x, enemyOrigin.y, enemyPos.x, enemyPos.y, 2500.0f, enemyTexture, deltaClock);
 	
 		// Enemy Bullet
 	if (!enemyBulletTexture.loadFromFile("Assets/1942_Enemy Bullet.png"))
@@ -206,9 +206,7 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 			if (bullet.sprite.getGlobalBounds().intersects(enemy.sprite.getGlobalBounds()))
 			{
 				std::cout << "Bullet collision with enemy" << "\n";
-				std::cout << enemyHealth << "\n"; //fjf
 				enemyHealth = enemyHealth - 1;
-				std::cout << enemyHealth << "\n"; //fjf
 				if (enemyHealth == 0)
 				{
 					enemyKilled = true;
