@@ -16,4 +16,5 @@ public:
 
 	void shoot(sf::RenderWindow &appWindow, sf::Sprite &bulletSprite);
 	void processBullet();
+	bool operator ==(const Bullet &bullet);
 };

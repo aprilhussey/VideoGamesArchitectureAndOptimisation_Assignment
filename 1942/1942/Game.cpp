@@ -198,6 +198,7 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 		// Process all items for this tick before drawing the frame
 
 		// Process bullets
+		std::vector<Bullet*> bulletsToDelete;
 		for (auto &bullet : bulletsOnScreen)
 		{
 			bullet.processBullet();
@@ -208,14 +209,20 @@ void Game::run(sf::RenderWindow& appWindow, sf::Event& event)
 				std::cout << enemyHealth << "\n"; //fjf
 				enemyHealth = enemyHealth - 1;
 				std::cout << enemyHealth << "\n"; //fjf
-				system("pause");
-				bulletCollided = true;
 				if (enemyHealth == 0)
 				{
 					enemyKilled = true;
 				}
+				bulletsToDelete.emplace_back(&bullet);
 			}
 		}
+
+		// Remove each bullet that has collided from the bullets on screen vector
+		for (auto bullet : bulletsToDelete)
+		{
+			bulletsOnScreen.erase(std::remove(bulletsOnScreen.begin(), bulletsOnScreen.end(), *bullet), bulletsOnScreen.end());
+		}
+		bulletsToDelete.clear(); // Ensure cleared as full of broken references
 
 		// Process enemy bullets
 		for (auto &enemybullet : enemyBulletsOnScreen)
